@@ -231,11 +231,13 @@ def coord_handling(file, cut_off_radius, bead):
     
 if __name__ == '__main__':
     import matplotlib.pyplot as plt
+    cut_off = 20
     
     pdbs = glob.glob("../../../OneDrive - University of Strathclyde/covid19/Data/Testing/*/*eq_centred.gro")
     for i, pdb in enumerate(pdbs):
         pep = pdb.split("\\")[-1].split("_eq_")[0]
-        d = coord_handling(pdb, 30, "PO4")
+        d = coord_handling(pdb, cut_off, "PO4")
         plt.scatter([i], [sum(d["K"])/len(d["K"])], label=pep)
+    plt.title("Cut-off: " + str(cut_off))
     plt.legend()
     
