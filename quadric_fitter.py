@@ -211,18 +211,22 @@ def get_surrounding_coords(tree, coords, index, cut_off_radius):
 
 
 def file_reader(file, bead, wrap = False):
-    pipeline = ov.io.import_file(file)
+    #pipeline = ov.io.import_file(file)
+    pipeline = MDAnalysis.Universe(file)
     
     if wrap == True:
-        pipeline.modifiers.append(ov.modifiers.WrapPeriodicImagesModifier())
+        #pipeline.modifiers.append(ov.modifiers.WrapPeriodicImagesModifier())
+        print("NO WRAP FUNCTION")
     
-    pipeline.modifiers.append(ov.modifiers.SelectTypeModifier(property = 'Particle Type', types = set(bead)))    
+    #pipeline.modifiers.append(ov.modifiers.SelectTypeModifier(property = 'Particle Type', types = set(bead)))    
     
-    data = pipeline.compute()
+    #data = pipeline.compute()
+    data  = pipeline.select_atoms("name PO4")
     
-    a = np.where(data.particles.selection[:]==1)[0]
+    #a = np.where(data.particles.selection[:]==1)[0]
 
-    pos = np.array(data.particles.positions[:][a])
+    #pos = np.array(data.particles.positions[:][a])
+    pos = data.positions
 
     # b = list(bead)
     # c = ''.join(b)
@@ -269,7 +273,7 @@ def coord_handling(file, cut_off_radius, bead):
             H_vals.append(H_)
             successes.append(S_)
             funs.append(F_)
-
+    print(K_vals)
 
     d = {'K': K_vals,
          'H': H_vals,
@@ -302,7 +306,7 @@ def coord_handling(file, cut_off_radius, bead):
 def argument_reader():
     parser = argparse.ArgumentParser()
     
-    parser.add_argument('-b', '--bead', type = str, nargs = '+',  default = ['C5A'], help = 'The beads within the simulation frame to fit parabolas to')
+    parser.add_argument('-b', '--bead', type = str, nargs = '+',  default = ['PO4'], help = 'The beads within the simulation frame to fit parabolas to')
     parser.add_argument('-r', '--radius', type = int, nargs = '+',  default = [30], help = 'Search radius cutoff length for creating point clouds')
 
     args = parser.parse_args()
@@ -336,5 +340,5 @@ if __name__ == '__main__':
     else:
         csize = int(k)
     
-    with get_context("spawn").Pool(processes = 14) as pool:
+    with get_context("spawn").Pool(processes = 4) as pool:
         pool.starmap(coord_handling, paramlist, chunksize = csize)
