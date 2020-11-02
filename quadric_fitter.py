@@ -13,7 +13,7 @@ from scipy.spatial import KDTree
 from scipy.optimize import shgo
 from scipy import linalg
 
-from mdma import atom
+#from mdma import atom
 from skimage import measure
 import glob
 from itertools import product
@@ -150,9 +150,10 @@ def fit_writer(initial_points, fit_result, index, file, cut_off_radius, bead):
         fname = os.path.abspath(file).split('.pdb')[0] + '_'+c+'_COradius_'+ str(cut_off_radius) +'_points_out_'+str(index)+'.atom'
         
         with open(fname, 'w') as f:
-            atom.write(points_out, np.array([[points_out[0:,0].min(), points_out[0:,0].max()],
-                                             [points_out[0:,1].min(), points_out[0:,1].max()],
-                                             [points_out[0:,2].min(), points_out[0:,2].max()]]), f, names_out)
+            #atom.write(points_out, np.array([[points_out[0:,0].min(), points_out[0:,0].max()],
+            #                                 [points_out[0:,1].min(), points_out[0:,1].max()],
+            #                                 [points_out[0:,2].min(), points_out[0:,2].max()]]), f, names_out)
+            f.write("QUADRIC_FITTER_PLACEHOLDER")
 
     except ValueError as e1:
         print(e1)
@@ -323,7 +324,7 @@ def make_paramlist(files, ball_point_radii, bead):
     return paramlist
 
 if __name__ == '__main__':
-    f = glob.glob('*.pdb')   
+    f = glob.glob("../../../OneDrive - University of Strathclyde/covid19/Data/Testing/PFF/*_eq.pdb")
     
     bead, ball_point_radii = argument_reader()
     paramlist = make_paramlist(f, ball_point_radii, bead)
