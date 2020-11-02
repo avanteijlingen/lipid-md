@@ -13,9 +13,6 @@ from scipy.optimize import shgo
 from scipy import linalg
 
 import glob
-from itertools import product
-import pandas 
-import argparse
 import MDAnalysis
 
 def PCA(data):
@@ -232,41 +229,6 @@ def coord_handling(file, cut_off_radius, bead):
     
     '''
     
-    #df = pd.DataFrame(d)
-
-    #b = list(bead)
-    #c = ''.join(b)
-
-    #fname = os.path.abspath(file).split('.pdb')[0]+'_'+c+'_results_Rc_'+str(cut_off_radius)+'.p'
-    #pickle.dump(df, open(fname, 'wb'))
-    
-
-
-
-def argument_reader():
-    parser = argparse.ArgumentParser()
-    
-    parser.add_argument('-b', '--bead', type = str, nargs = '+',  default = ['PO4'], help = 'The beads within the simulation frame to fit parabolas to')
-    parser.add_argument('-r', '--radius', type = int, nargs = '+',  default = [30], help = 'Search radius cutoff length for creating point clouds')
-
-    args = parser.parse_args()
-
-    beads = np.array(args.bead)
-    radius = np.array(args.radius)
-    
-    return beads, radius
-
-def make_paramlist(files, ball_point_radii, bead):
-    init_list = list(product(files, ball_point_radii))
-    
-    
-    paramlist = []
-    
-    for i in init_list:
-        paramlist.append(i+(bead,))
-        
-    return paramlist
-
 if __name__ == '__main__':
     import matplotlib.pyplot as plt
     
