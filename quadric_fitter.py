@@ -109,59 +109,6 @@ def mean_curvature(paras):
     return H
 
 
-
-def fit_writer(initial_points, fit_result, index, file, cut_off_radius, bead):
-    
-    #set up the mgrid in teh right spatial position
-    d1 = initial_points[0:,0].mean()
-    d2 = initial_points[0:,1].mean()
-    d3 = initial_points[0:,2].mean()
-    
-    e1 = np.abs(initial_points[0:,0].max()-initial_points[0:,0].min()) /2
-    e2 = np.abs(initial_points[0:,1].max()-initial_points[0:,1].min()) /2
-    e3 = np.abs(initial_points[0:,2].max()-initial_points[0:,2].min()) /2
-    
-    
-    X,Y,Z = np.mgrid[float(d1-e1):float(d1+e1):(2*float(e1)*1j), 
-                     float(d2-e2):float(d2+e2):(2*float(e2)*1j), 
-                     float(d3-e3):float(d3+e3):(2*float(e3)*1j)]
-    
-    #compute the value of the fitted result on the mgrid
-    t = quadric(fit_result, X, Y, Z)
-    
-    try:
-        #generate point solutions using marching cubes
-        vertices, simplices,normals, values = measure.marching_cubes_lewiner(t)
-        
-        #sort out the vertices and append them to the list of coordinates to write to file
-        Xp,Yp,Zp = zip(*vertices)
-        
-        surface_points = np.array([Xp,Yp,Zp]).T
-        
-        surface_points -= np.mean(surface_points, axis = 0)
-        
-        points_out = np.vstack((initial_points, surface_points))
-        
-        names_out = ['initial']*len(initial_points) + ['fitted']*len(surface_points)
-        
-        b = list(bead)
-        c = ''.join(b)
-
-        fname = os.path.abspath(file).split('.pdb')[0] + '_'+c+'_COradius_'+ str(cut_off_radius) +'_points_out_'+str(index)+'.atom'
-        
-        with open(fname, 'w') as f:
-            #atom.write(points_out, np.array([[points_out[0:,0].min(), points_out[0:,0].max()],
-            #                                 [points_out[0:,1].min(), points_out[0:,1].max()],
-            #                                 [points_out[0:,2].min(), points_out[0:,2].max()]]), f, names_out)
-            f.write("QUADRIC_FITTER_PLACEHOLDER")
-
-    except ValueError as e1:
-        print(e1)
-        pass
-    except RuntimeError as e2:
-        print(e2)
-        pass
-    
 def fitting(a, index, file, cut_off_radius, bead):
 
         
@@ -194,9 +141,6 @@ def fitting(a, index, file, cut_off_radius, bead):
     success = res.success
     eval_val = res.fun
     
-    r = np.random.random()
-    if r>0.9999:
-        fit_writer(a[0], res.x, index, file, cut_off_radius, bead)
     
     return valK, valH, success, eval_val
 
