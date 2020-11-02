@@ -6,20 +6,15 @@ Created on Mon Jul 20 11:30:15 2020
 @author: Chris
 """
 
-import pickle
-import numpy as np
 
+import numpy as np
 from scipy.spatial import KDTree
 from scipy.optimize import shgo
 from scipy import linalg
 
-#from mdma import atom
-from skimage import measure
 import glob
 from itertools import product
-from multiprocessing import get_context
-import os
-import pandas as pd
+import pandas 
 import argparse
 import MDAnalysis
 
