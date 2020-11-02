@@ -21,7 +21,7 @@ from multiprocessing import get_context
 import os
 import pandas as pd
 import argparse
-import ovito as ov
+import MDAnalysis
 
 def PCA(data):
     '''
