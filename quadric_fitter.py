@@ -280,6 +280,7 @@ def coord_handling(file, cut_off_radius, bead):
          'Status': successes,
          'Function Value': funs}
     
+    return d
     
     '''
     for calculating bending modulus:
@@ -292,13 +293,13 @@ def coord_handling(file, cut_off_radius, bead):
     
     '''
     
-    df = pd.DataFrame(d)
+    #df = pd.DataFrame(d)
 
-    b = list(bead)
-    c = ''.join(b)
+    #b = list(bead)
+    #c = ''.join(b)
 
-    fname = os.path.abspath(file).split('.pdb')[0]+'_'+c+'_results_Rc_'+str(cut_off_radius)+'.p'
-    pickle.dump(df, open(fname, 'wb'))
+    #fname = os.path.abspath(file).split('.pdb')[0]+'_'+c+'_results_Rc_'+str(cut_off_radius)+'.p'
+    #pickle.dump(df, open(fname, 'wb'))
     
 
 
@@ -328,17 +329,24 @@ def make_paramlist(files, ball_point_radii, bead):
     return paramlist
 
 if __name__ == '__main__':
-    f = glob.glob("../../../OneDrive - University of Strathclyde/covid19/Data/Testing/PFF/*_eq.pdb")
+    import matplotlib.pyplot as plt
     
-    bead, ball_point_radii = argument_reader()
-    paramlist = make_paramlist(f, ball_point_radii, bead)
+    pdbs = glob.glob("../../../OneDrive - University of Strathclyde/covid19/Data/Testing/*/*eq_centred.gro")
+    for i, pdb in enumerate(pdbs):
+        pep = pdb.split("\\")[-1].split("_eq_")[0]
+        d = coord_handling(pdb, 30, "PO4")
+        plt.scatter([i], [sum(d["K"])/len(d["K"])], label=pep)
+    plt.legend()
     
-    k = len(paramlist)/14
+    #bead, ball_point_radii = argument_reader()
+    #paramlist = make_paramlist(f, ball_point_radii, bead)
     
-    if k < 1:
-        csize = 1
-    else:
-        csize = int(k)
+    #k = len(paramlist)/14
     
-    with get_context("spawn").Pool(processes = 4) as pool:
-        pool.starmap(coord_handling, paramlist, chunksize = csize)
+    #if k < 1:
+        #csize = 1
+    #else:
+        #csize = int(k)
+    
+    #with get_context("spawn").Pool(processes = 4) as pool:
+        #pool.starmap(coord_handling, paramlist, chunksize = csize)
