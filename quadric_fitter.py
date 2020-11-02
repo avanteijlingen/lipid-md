@@ -282,15 +282,3 @@ if __name__ == '__main__':
         plt.scatter([i], [sum(d["K"])/len(d["K"])], label=pep)
     plt.legend()
     
-    #bead, ball_point_radii = argument_reader()
-    #paramlist = make_paramlist(f, ball_point_radii, bead)
-    
-    #k = len(paramlist)/14
-    
-    #if k < 1:
-        #csize = 1
-    #else:
-        #csize = int(k)
-    
-    #with get_context("spawn").Pool(processes = 4) as pool:
-        #pool.starmap(coord_handling, paramlist, chunksize = csize)
